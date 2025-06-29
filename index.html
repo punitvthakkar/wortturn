@@ -16,14 +16,14 @@
 
         body {
             font-family: 'Press Start 2P', monospace;
-            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            background: linear-gradient(45deg, #0a0a23, #1a1a2e, #16213e);
             color: #fff;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Retro scanlines effect */
+        /* Enhanced scanlines effect */
         body::before {
             content: '';
             position: fixed;
@@ -35,11 +35,24 @@
                 0deg,
                 transparent,
                 transparent 2px,
-                rgba(0,255,0,0.03) 2px,
-                rgba(0,255,0,0.03) 4px
+                rgba(0,255,0,0.02) 2px,
+                rgba(0,255,0,0.02) 4px
             );
             pointer-events: none;
             z-index: 1000;
+        }
+
+        /* Glow effects */
+        .glow-green {
+            box-shadow: 0 0 20px #00ff41, inset 0 0 20px rgba(0,255,65,0.1);
+        }
+
+        .glow-orange {
+            box-shadow: 0 0 20px #ff6b35, inset 0 0 20px rgba(255,107,53,0.1);
+        }
+
+        .glow-blue {
+            box-shadow: 0 0 20px #00bfff, inset 0 0 20px rgba(0,191,255,0.1);
         }
 
         .container {
@@ -54,15 +67,22 @@
         }
 
         .title {
-            font-size: clamp(16px, 4vw, 24px);
+            font-size: clamp(20px, 5vw, 32px);
             color: #00ff41;
-            text-shadow: 0 0 10px #00ff41;
+            text-shadow: 0 0 20px #00ff41;
             margin-bottom: 10px;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { text-shadow: 0 0 20px #00ff41; }
+            50% { text-shadow: 0 0 30px #00ff41, 0 0 40px #00ff41; }
         }
 
         .subtitle {
-            font-size: clamp(8px, 2vw, 12px);
+            font-size: clamp(10px, 2.5vw, 14px);
             color: #ff6b35;
+            text-shadow: 0 0 10px #ff6b35;
         }
 
         /* Tab Navigation */
@@ -75,21 +95,38 @@
         }
 
         .tab-btn {
-            background: #0f4c75;
+            background: linear-gradient(45deg, #0f4c75, #1a5490);
             border: 3px solid #00ff41;
             color: #fff;
-            padding: 12px 20px;
+            padding: 15px 25px;
             cursor: pointer;
             font-family: inherit;
-            font-size: clamp(8px, 2vw, 10px);
+            font-size: clamp(8px, 2vw, 12px);
             transition: all 0.3s;
             text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,255,65,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .tab-btn:hover::before {
+            left: 100%;
         }
 
         .tab-btn:hover, .tab-btn.active {
-            background: #00ff41;
+            background: linear-gradient(45deg, #00ff41, #00cc33);
             color: #000;
-            box-shadow: 0 0 15px #00ff41;
+            transform: translateY(-2px);
         }
 
         .tab-content {
@@ -100,254 +137,445 @@
             display: block;
         }
 
-        /* Game Screen */
+        /* WWTBAM Game Screen */
         .game-area {
-            background: rgba(15, 76, 117, 0.8);
-            border: 3px solid #00ff41;
-            border-radius: 10px;
-            padding: 20px;
+            background: linear-gradient(135deg, rgba(15, 76, 117, 0.9), rgba(26, 84, 144, 0.9));
+            border: 4px solid #00ff41;
+            border-radius: 15px;
+            padding: 25px;
             margin-bottom: 20px;
+            position: relative;
         }
 
-        .progress-bar {
+        .game-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
         }
 
-        .score {
-            font-size: clamp(10px, 2.5vw, 14px);
-            color: #ff6b35;
+        .score-display {
+            background: linear-gradient(45deg, #ff6b35, #ff8c42);
+            border: 3px solid #fff;
+            border-radius: 10px;
+            padding: 15px 20px;
+            font-size: clamp(12px, 3vw, 16px);
+            color: #000;
+            font-weight: bold;
+            text-shadow: none;
         }
 
         .question-counter {
-            font-size: clamp(8px, 2vw, 12px);
-            color: #00ff41;
+            background: linear-gradient(45deg, #00ff41, #00cc33);
+            border: 3px solid #fff;
+            border-radius: 10px;
+            padding: 15px 20px;
+            font-size: clamp(10px, 2.5vw, 14px);
+            color: #000;
+            font-weight: bold;
+            text-shadow: none;
         }
 
+        /* Lifelines */
+        .lifelines {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .lifeline-btn {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            border: 3px solid #00bfff;
+            color: #fff;
+            padding: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: clamp(8px, 1.8vw, 10px);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .lifeline-btn:hover:not(:disabled) {
+            background: linear-gradient(45deg, #00bfff, #0099cc);
+            transform: scale(1.1);
+        }
+
+        .lifeline-btn:disabled {
+            background: #333;
+            border-color: #666;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .lifeline-btn.used {
+            background: #8b0000;
+            border-color: #666;
+            color: #666;
+        }
+
+        .lifeline-icon {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .lifeline-text {
+            font-size: 6px;
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* Question Box */
         .question-box {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #ff6b35;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            min-height: 120px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 26, 46, 0.8));
+            border: 4px solid #ff6b35;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            min-height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
+            position: relative;
+        }
+
+        .question-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b35, #00ff41, #ff6b35);
+            border-radius: 15px;
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
         }
 
         .question-text {
-            font-size: clamp(12px, 3vw, 16px);
-            line-height: 1.5;
+            font-size: clamp(14px, 3.5vw, 18px);
+            line-height: 1.6;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
-        .options-grid {
+        /* WWTBAM Options Grid */
+        .wwtbam-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .option-pair {
+            display: flex;
+            flex-direction: column;
             gap: 15px;
-            margin-bottom: 20px;
         }
 
         .option-btn {
-            background: #1a1a2e;
-            border: 2px solid #00ff41;
+            background: linear-gradient(135deg, #1a1a2e, #2d2d5a);
+            border: 4px solid #00ff41;
             color: #fff;
-            padding: 15px;
+            padding: 20px;
             cursor: pointer;
             font-family: inherit;
-            font-size: clamp(10px, 2.5vw, 12px);
-            transition: all 0.3s;
-            border-radius: 5px;
-            min-height: 60px;
+            font-size: clamp(11px, 2.8vw, 14px);
+            transition: all 0.4s;
+            border-radius: 12px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,255,65,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .option-btn:hover:not(:disabled)::before {
+            left: 100%;
+        }
+
+        .option-letter {
+            background: linear-gradient(45deg, #ff6b35, #ff8c42);
+            color: #000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .option-text {
+            flex: 1;
+            line-height: 1.4;
         }
 
         .option-btn:hover:not(:disabled) {
-            background: #00ff41;
+            background: linear-gradient(135deg, #00ff41, #00cc33);
             color: #000;
-            transform: translateY(-2px);
+            transform: translateX(10px) scale(1.02);
+            border-color: #fff;
+        }
+
+        .option-btn:hover:not(:disabled) .option-letter {
+            background: linear-gradient(45deg, #fff, #e0e0e0);
         }
 
         .option-btn.correct {
-            background: #28a745;
-            border-color: #28a745;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-color: #fff;
+            color: #000;
+            animation: correctPulse 1s ease-in-out;
         }
 
         .option-btn.wrong {
-            background: #dc3545;
-            border-color: #dc3545;
+            background: linear-gradient(135deg, #dc3545, #e55d6c);
+            border-color: #fff;
+            color: #000;
+            animation: wrongShake 0.6s ease-in-out;
         }
 
-        .option-btn:disabled {
-            opacity: 0.6;
+        .option-btn.eliminated {
+            background: #333;
+            border-color: #666;
+            color: #666;
+            opacity: 0.3;
             cursor: not-allowed;
         }
 
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Control Buttons */
         .control-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
         .btn {
-            background: #ff6b35;
-            border: 2px solid #ff6b35;
-            color: #fff;
-            padding: 12px 24px;
+            background: linear-gradient(45deg, #ff6b35, #ff8c42);
+            border: 3px solid #fff;
+            color: #000;
+            padding: 15px 30px;
             cursor: pointer;
             font-family: inherit;
-            font-size: clamp(8px, 2vw, 10px);
-            border-radius: 5px;
+            font-size: clamp(10px, 2.5vw, 12px);
+            border-radius: 8px;
             transition: all 0.3s;
             text-transform: uppercase;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn:hover {
-            background: transparent;
-            color: #ff6b35;
-            box-shadow: 0 0 10px #ff6b35;
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255,107,53,0.3);
         }
 
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
-        /* Ladder */
+        /* Ladder styles */
         .ladder {
-            background: rgba(15, 76, 117, 0.8);
-            border: 3px solid #00ff41;
-            border-radius: 10px;
-            padding: 20px;
+            background: linear-gradient(135deg, rgba(15, 76, 117, 0.9), rgba(26, 84, 144, 0.9));
+            border: 4px solid #00ff41;
+            border-radius: 15px;
+            padding: 25px;
         }
 
         .ladder-rung {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 15px;
-            margin: 5px 0;
-            border: 2px solid #333;
-            background: rgba(0, 0, 0, 0.3);
-            font-size: clamp(8px, 2vw, 12px);
+            padding: 15px 20px;
+            margin: 8px 0;
+            border: 3px solid #333;
+            background: rgba(0, 0, 0, 0.4);
+            font-size: clamp(10px, 2.2vw, 13px);
+            border-radius: 8px;
+            transition: all 0.3s;
         }
 
         .ladder-rung.current {
             border-color: #ff6b35;
-            background: rgba(255, 107, 53, 0.2);
-            animation: pulse 2s infinite;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.3), rgba(255, 140, 66, 0.3));
+            animation: currentRungPulse 2s infinite;
+            transform: scale(1.05);
         }
 
         .ladder-rung.completed {
             border-color: #00ff41;
-            background: rgba(0, 255, 65, 0.2);
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.3), rgba(0, 204, 51, 0.3));
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+        @keyframes currentRungPulse {
+            0%, 100% { 
+                box-shadow: 0 0 10px #ff6b35;
+            }
+            50% { 
+                box-shadow: 0 0 25px #ff6b35, 0 0 35px #ff6b35;
+            }
         }
 
-        /* Score History */
-        .score-history {
-            background: rgba(15, 76, 117, 0.8);
-            border: 3px solid #00ff41;
-            border-radius: 10px;
-            padding: 20px;
+        /* Score History and Dashboard - keeping existing styles but enhanced */
+        .score-history, .dashboard {
+            background: linear-gradient(135deg, rgba(15, 76, 117, 0.9), rgba(26, 84, 144, 0.9));
+            border: 4px solid #00ff41;
+            border-radius: 15px;
+            padding: 25px;
         }
 
         .score-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            margin: 10px 0;
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px solid #333;
+            padding: 18px;
+            margin: 12px 0;
+            background: rgba(0, 0, 0, 0.4);
+            border: 3px solid #333;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: clamp(8px, 2vw, 11px);
+            font-size: clamp(9px, 2vw, 12px);
             flex-wrap: wrap;
             gap: 10px;
+            border-radius: 8px;
         }
 
         .score-item:hover {
             border-color: #00ff41;
             background: rgba(0, 255, 65, 0.1);
+            transform: translateX(10px);
         }
 
-        .score-details {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #ff6b35;
-            border-radius: 5px;
+        /* Lifeline Modals */
+        .modal {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1001;
+            animation: modalFadeIn 0.3s ease-out;
         }
 
-        .score-details.show {
-            display: block;
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        /* Dashboard */
-        .dashboard {
-            background: rgba(15, 76, 117, 0.8);
-            border: 3px solid #00ff41;
-            border-radius: 10px;
-            padding: 20px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #ff6b35;
-            border-radius: 8px;
-            padding: 15px;
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1a1a2e, #2d2d5a);
+            border: 4px solid #00ff41;
+            border-radius: 15px;
+            padding: 30px;
             text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: modalSlideIn 0.4s ease-out;
         }
 
-        .stat-value {
-            font-size: clamp(16px, 4vw, 24px);
+        @keyframes modalSlideIn {
+            from { transform: translate(-50%, -60%) scale(0.9); }
+            to { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .modal-title {
+            font-size: clamp(16px, 4vw, 20px);
             color: #00ff41;
-            margin-bottom: 5px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #00ff41;
         }
 
-        .stat-label {
-            font-size: clamp(8px, 2vw, 10px);
+        .modal-text {
+            font-size: clamp(12px, 3vw, 14px);
             color: #fff;
-        }
-
-        .chart-container {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #00ff41;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
+            margin-bottom: 25px;
+            line-height: 1.6;
         }
 
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 15px;
             }
             
-            .options-grid {
+            .wwtbam-options {
                 grid-template-columns: 1fr;
+            }
+            
+            .option-pair {
+                gap: 10px;
             }
             
             .tab-nav {
@@ -359,51 +587,100 @@
                 width: 100%;
                 max-width: 300px;
             }
+
+            .lifelines {
+                gap: 10px;
+            }
+
+            .lifeline-btn {
+                width: 50px;
+                height: 50px;
+            }
         }
 
-        /* Game Over Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1001;
+        @media (max-width: 480px) {
+            .game-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .option-btn {
+                padding: 15px;
+                min-height: 70px;
+            }
+
+            .option-letter {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+                margin-right: 10px;
+            }
         }
 
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #1a1a2e;
-            border: 3px solid #00ff41;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #333;
+            border-radius: 50%;
+            border-top-color: #00ff41;
+            animation: spin 1s ease-in-out infinite;
         }
 
-        .modal-title {
-            font-size: clamp(14px, 3vw, 18px);
-            color: #00ff41;
-            margin-bottom: 20px;
-        }
-
-        .modal-score {
-            font-size: clamp(12px, 2.5vw, 16px);
-            color: #ff6b35;
-            margin-bottom: 20px;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .empty-state {
             text-align: center;
-            padding: 40px;
+            padding: 50px;
             color: #666;
-            font-size: clamp(10px, 2vw, 12px);
+            font-size: clamp(11px, 2.5vw, 14px);
+            line-height: 1.6;
+        }
+
+        /* Stats and Dashboard enhancements */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 3px solid #ff6b35;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff41;
+        }
+
+        .stat-value {
+            font-size: clamp(20px, 5vw, 28px);
+            color: #00ff41;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .stat-label {
+            font-size: clamp(9px, 2vw, 11px);
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.6);
+            border: 3px solid #00ff41;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -424,26 +701,46 @@
         <!-- Game Tab -->
         <div id="game" class="tab-content active">
             <div class="game-area">
-                <div class="progress-bar">
-                    <div class="score">Score: <span id="current-score">0</span></div>
+                <div class="game-header">
+                    <div class="score-display">Score: <span id="current-score">0</span></div>
                     <div class="question-counter">Question <span id="question-num">0</span> of 15</div>
+                </div>
+                
+                <!-- Lifelines -->
+                <div class="lifelines">
+                    <button class="lifeline-btn" id="fifty-fifty" onclick="useFiftyFifty()" title="50:50">
+                        <div class="lifeline-icon">⚡</div>
+                        <div class="lifeline-text">50:50</div>
+                    </button>
+                    <button class="lifeline-btn" id="phone-friend" onclick="usePhoneFriend()" title="Phone a Friend">
+                        <div class="lifeline-icon">📞</div>
+                        <div class="lifeline-text">PHONE</div>
+                    </button>
+                    <button class="lifeline-btn" id="ask-audience" onclick="useAskAudience()" title="Ask the Audience">
+                        <div class="lifeline-icon">👥</div>
+                        <div class="lifeline-text">AUDIENCE</div>
+                    </button>
+                    <button class="lifeline-btn" id="ask-expert" onclick="useAskExpert()" title="Ask the Expert">
+                        <div class="lifeline-icon">🎓</div>
+                        <div class="lifeline-text">EXPERT</div>
+                    </button>
                 </div>
                 
                 <div class="question-box">
                     <div class="question-text" id="question-text">
                         Welcome to German Quiz Master!<br>
-                        Click START to begin your journey.
+                        Click START to begin your journey to become a German master!
                     </div>
                 </div>
                 
-                <div class="options-grid" id="options-container">
+                <div class="wwtbam-options" id="options-container">
                     <!-- Options will be populated by JavaScript -->
                 </div>
                 
                 <div class="control-buttons">
                     <button class="btn" id="start-btn" onclick="startGame()">START GAME</button>
-                    <button class="btn" id="next-btn" onclick="nextQuestion()" style="display:none;">NEXT</button>
-                    <button class="btn" id="quit-btn" onclick="quitGame()" style="display:none;">QUIT</button>
+                    <button class="btn" id="next-btn" onclick="nextQuestion()" style="display:none;">NEXT QUESTION</button>
+                    <button class="btn" id="quit-btn" onclick="quitGame()" style="display:none;">QUIT GAME</button>
                 </div>
             </div>
         </div>
@@ -451,7 +748,7 @@
         <!-- Ladder Tab -->
         <div id="ladder" class="tab-content">
             <div class="ladder">
-                <h2 style="text-align: center; margin-bottom: 20px; color: #00ff41;">DIFFICULTY LADDER</h2>
+                <h2 style="text-align: center; margin-bottom: 30px; color: #00ff41; font-size: clamp(16px, 4vw, 24px);">DIFFICULTY LADDER</h2>
                 <div id="ladder-container">
                     <!-- Ladder will be populated by JavaScript -->
                 </div>
@@ -461,7 +758,7 @@
         <!-- History Tab -->
         <div id="history" class="tab-content">
             <div class="score-history">
-                <h2 style="text-align: center; margin-bottom: 20px; color: #00ff41;">SCORE HISTORY</h2>
+                <h2 style="text-align: center; margin-bottom: 30px; color: #00ff41; font-size: clamp(16px, 4vw, 24px);">SCORE HISTORY</h2>
                 <div id="history-container">
                     <!-- History will be populated by JavaScript -->
                 </div>
@@ -471,7 +768,7 @@
         <!-- Dashboard Tab -->
         <div id="dashboard" class="tab-content">
             <div class="dashboard">
-                <h2 style="text-align: center; margin-bottom: 20px; color: #00ff41;">PERFORMANCE DASHBOARD</h2>
+                <h2 style="text-align: center; margin-bottom: 30px; color: #00ff41; font-size: clamp(16px, 4vw, 24px);">PERFORMANCE DASHBOARD</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-value" id="total-games">0</div>
@@ -497,12 +794,25 @@
         </div>
     </div>
 
+    <!-- Lifeline Modals -->
+    <div id="lifeline-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="lifeline-title">Lifeline</h2>
+            <div class="modal-text" id="lifeline-text"></div>
+            <div class="control-buttons">
+                <button class="btn" onclick="closeLifelineModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Game Over Modal -->
     <div id="game-over-modal" class="modal">
         <div class="modal-content">
             <h2 class="modal-title">GAME OVER</h2>
-            <div class="modal-score">Final Score: <span id="final-score">0</span></div>
-            <div style="margin-bottom: 20px;">
+            <div class="modal-text">
+                <div style="font-size: clamp(14px, 3.5vw, 18px); color: #ff6b35; margin-bottom: 15px;">
+                    Final Score: <span id="final-score">0</span>
+                </div>
                 <div style="margin-bottom: 10px;">Questions Answered: <span id="questions-answered">0</span>/15</div>
                 <div>Accuracy: <span id="final-accuracy">0%</span></div>
             </div>
@@ -522,7 +832,13 @@
             score: 0,
             answers: [],
             startTime: null,
-            endTime: null
+            endTime: null,
+            lifelines: {
+                fiftyFifty: true,
+                phoneFriend: true,
+                askAudience: true,
+                askExpert: true
+            }
         };
 
         // Difficulty levels and scoring
@@ -552,22 +868,89 @@
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Initializing app...');
             await loadGameData();
             initializeLadder();
             loadScoreHistory();
             updateDashboard();
         });
 
-        // Load vocabulary data
+        // Load vocabulary data with better error handling
         async function loadGameData() {
             try {
+                console.log('Loading game data...');
                 const response = await fetch('list.json');
-                gameData = await response.json();
-                console.log('Game data loaded successfully');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const text = await response.text();
+                console.log('Raw JSON response length:', text.length);
+                
+                gameData = JSON.parse(text);
+                console.log('Game data loaded successfully:', gameData);
+                
+                // Validate data structure
+                if (!gameData.core_vocabulary_A1_B1) {
+                    throw new Error('Invalid data structure: missing core_vocabulary_A1_B1');
+                }
+                
+                console.log('Available levels:', Object.keys(gameData.core_vocabulary_A1_B1));
+                
             } catch (error) {
                 console.error('Error loading game data:', error);
-                alert('Error loading vocabulary data. Please check that list.json is available.');
+                alert('Error loading vocabulary data. Please ensure list.json is in the same folder and properly formatted.');
+                
+                // Fallback demo data
+                gameData = createDemoData();
             }
+        }
+
+        // Create demo data as fallback
+        function createDemoData() {
+            return {
+                core_vocabulary_A1_B1: {
+                    A1: {
+                        nomen: [
+                            {
+                                wort: "Haus",
+                                artikel: "das",
+                                plural: "die Häuser",
+                                bedeutung_en: "house",
+                                synonyme_de: ["Gebäude"],
+                                antonyme_de: []
+                            },
+                            {
+                                wort: "Auto",
+                                artikel: "das", 
+                                plural: "die Autos",
+                                bedeutung_en: "car",
+                                synonyme_de: ["Wagen"],
+                                antonyme_de: []
+                            }
+                        ],
+                        verben: [
+                            {
+                                infinitiv: "sein",
+                                praeteritum: "war",
+                                partizip_ii: "gewesen",
+                                bedeutung_en: "to be",
+                                synonyme_de: [],
+                                antonyme_de: []
+                            }
+                        ],
+                        adjektive_adverbien: [
+                            {
+                                wort: "gut",
+                                bedeutung_en: "good",
+                                synonyme_de: ["schön"],
+                                antonyme_de: ["schlecht"]
+                            }
+                        ]
+                    }
+                }
+            };
         }
 
         // Tab switching
@@ -585,50 +968,73 @@
             }
         }
 
-        // Question generation
+        // Enhanced question generation with better error handling
         function generateQuestion(difficulty) {
-            if (!gameData) return null;
+            if (!gameData || !gameData.core_vocabulary_A1_B1) {
+                console.error('Game data not available');
+                return null;
+            }
 
             const questionTypes = [
-                'article', 'plural', 'translation', 'synonym', 'antonym', 
-                'verb_preteritum', 'verb_partizip', 'preposition'
+                'article', 'plural', 'translation', 'synonym', 'antonym'
             ];
             
             const type = questionTypes[Math.floor(Math.random() * questionTypes.length)];
             const levels = ['A1', 'A2', 'B1'];
             
             // Adjust complexity based on difficulty
-            const levelWeights = difficulty === 'easy' ? [0.6, 0.3, 0.1] :
-                                difficulty === 'medium' ? [0.2, 0.5, 0.3] :
+            const levelWeights = difficulty === 'easy' ? [0.7, 0.2, 0.1] :
+                                difficulty === 'medium' ? [0.2, 0.6, 0.2] :
                                 [0.1, 0.3, 0.6];
             
             const level = selectWeightedRandom(levels, levelWeights);
             
             try {
-                switch (type) {
-                    case 'article':
-                        return generateArticleQuestion(level);
-                    case 'plural':
-                        return generatePluralQuestion(level);
-                    case 'translation':
-                        return generateTranslationQuestion(level);
-                    case 'synonym':
-                        return generateSynonymQuestion(level);
-                    case 'antonym':
-                        return generateAntonymQuestion(level);
-                    case 'verb_preteritum':
-                        return generateVerbQuestion(level, 'preteritum');
-                    case 'verb_partizip':
-                        return generateVerbQuestion(level, 'partizip');
-                    case 'preposition':
-                        return generatePrepositionQuestion(level);
-                    default:
-                        return generateTranslationQuestion(level);
+                let question = null;
+                let attempts = 0;
+                const maxAttempts = 10;
+                
+                while (!question && attempts < maxAttempts) {
+                    switch (type) {
+                        case 'article':
+                            question = generateArticleQuestion(level);
+                            break;
+                        case 'plural':
+                            question = generatePluralQuestion(level);
+                            break;
+                        case 'translation':
+                            question = generateTranslationQuestion(level);
+                            break;
+                        case 'synonym':
+                            question = generateSynonymQuestion(level);
+                            break;
+                        case 'antonym':
+                            question = generateAntonymQuestion(level);
+                            break;
+                        default:
+                            question = generateTranslationQuestion(level);
+                    }
+                    attempts++;
                 }
+                
+                return question || generateFallbackQuestion();
+                
             } catch (error) {
                 console.error('Error generating question:', error);
-                return generateTranslationQuestion('A1'); // Fallback
+                return generateFallbackQuestion();
             }
+        }
+
+        function generateFallbackQuestion() {
+            return {
+                question: "What does 'Hallo' mean in English?",
+                type: 'translation',
+                level: 'A1',
+                correct: "Hello",
+                options: ["Hello", "Goodbye", "Please", "Thank you"],
+                word: "Hallo",
+                explanation: "Hallo = Hello"
+            };
         }
 
         function selectWeightedRandom(items, weights) {
@@ -644,13 +1050,28 @@
             return items[items.length - 1];
         }
 
+        function getWordsFromLevel(level, category) {
+            try {
+                const levelData = gameData.core_vocabulary_A1_B1[level];
+                if (!levelData) {
+                    console.warn(`Level ${level} not found, falling back to A1`);
+                    return gameData.core_vocabulary_A1_B1.A1?.[category] || [];
+                }
+                return levelData[category] || [];
+            } catch (error) {
+                console.error(`Error getting words from level ${level}, category ${category}:`, error);
+                return [];
+            }
+        }
+
         function generateArticleQuestion(level) {
-            const nouns = gameData.core_vocabulary_A1_B1[level]?.nomen || [];
+            const nouns = getWordsFromLevel(level, 'nomen');
             if (nouns.length === 0) return null;
             
             const noun = nouns[Math.floor(Math.random() * nouns.length)];
-            const correctAnswer = noun.artikel;
+            if (!noun.artikel || !noun.wort) return null;
             
+            const correctAnswer = noun.artikel;
             const articles = ['der', 'die', 'das'];
             const wrongAnswers = articles.filter(a => a !== correctAnswer);
             
@@ -659,15 +1080,15 @@
                 type: 'article',
                 level: level,
                 correct: correctAnswer,
-                options: shuffleArray([correctAnswer, ...wrongAnswers.slice(0, 3)]),
+                options: shuffleArray([correctAnswer, ...wrongAnswers]),
                 word: noun.wort,
-                explanation: `${correctAnswer} ${noun.wort} (${noun.bedeutung_en})`
+                explanation: `${correctAnswer} ${noun.wort} (${noun.bedeutung_en || 'German word'})`
             };
         }
 
         function generatePluralQuestion(level) {
-            const nouns = gameData.core_vocabulary_A1_B1[level]?.nomen || [];
-            const validNouns = nouns.filter(n => n.plural && n.plural !== '(kein Plural)');
+            const nouns = getWordsFromLevel(level, 'nomen');
+            const validNouns = nouns.filter(n => n.plural && n.plural !== '(kein Plural)' && n.artikel && n.wort);
             if (validNouns.length === 0) return null;
             
             const noun = validNouns[Math.floor(Math.random() * validNouns.length)];
@@ -690,18 +1111,28 @@
         function generateTranslationQuestion(level) {
             const categories = ['nomen', 'verben', 'adjektive_adverbien'];
             const category = categories[Math.floor(Math.random() * categories.length)];
-            const words = gameData.core_vocabulary_A1_B1[level]?.[category] || [];
-            if (words.length === 0) return null;
+            const words = getWordsFromLevel(level, category);
+            const validWords = words.filter(w => w.wort && w.bedeutung_en);
             
-            const word = words[Math.floor(Math.random() * words.length)];
+            if (validWords.length === 0) return null;
+            
+            const word = validWords[Math.floor(Math.random() * validWords.length)];
             const correctAnswer = word.bedeutung_en;
             
-            // Generate wrong answers from same category
-            const wrongAnswers = words
+            // Generate wrong answers from same category or all categories
+            let wrongAnswers = validWords
                 .filter(w => w.bedeutung_en !== correctAnswer)
                 .map(w => w.bedeutung_en)
                 .sort(() => 0.5 - Math.random())
                 .slice(0, 3);
+            
+            // If not enough wrong answers, add some generic ones
+            if (wrongAnswers.length < 3) {
+                const genericAnswers = ['to go', 'house', 'good', 'bad', 'big', 'small'];
+                wrongAnswers = [...wrongAnswers, ...genericAnswers]
+                    .filter(ans => ans !== correctAnswer)
+                    .slice(0, 3);
+            }
             
             return {
                 question: `What does "${word.wort}" mean in English?`,
@@ -717,8 +1148,9 @@
         function generateSynonymQuestion(level) {
             const categories = ['nomen', 'verben', 'adjektive_adverbien'];
             const category = categories[Math.floor(Math.random() * categories.length)];
-            const words = gameData.core_vocabulary_A1_B1[level]?.[category] || [];
-            const wordsWithSynonyms = words.filter(w => w.synonyme_de && w.synonyme_de.length > 0);
+            const words = getWordsFromLevel(level, category);
+            const wordsWithSynonyms = words.filter(w => w.synonyme_de && w.synonyme_de.length > 0 && w.wort);
+            
             if (wordsWithSynonyms.length === 0) return null;
             
             const word = wordsWithSynonyms[Math.floor(Math.random() * wordsWithSynonyms.length)];
@@ -726,7 +1158,7 @@
             
             // Generate wrong answers
             const wrongAnswers = words
-                .filter(w => w.wort !== word.wort && !word.synonyme_de.includes(w.wort))
+                .filter(w => w.wort && w.wort !== word.wort && !word.synonyme_de.includes(w.wort))
                 .map(w => w.wort)
                 .sort(() => 0.5 - Math.random())
                 .slice(0, 3);
@@ -745,8 +1177,9 @@
         function generateAntonymQuestion(level) {
             const categories = ['nomen', 'verben', 'adjektive_adverbien'];
             const category = categories[Math.floor(Math.random() * categories.length)];
-            const words = gameData.core_vocabulary_A1_B1[level]?.[category] || [];
-            const wordsWithAntonyms = words.filter(w => w.antonyme_de && w.antonyme_de.length > 0);
+            const words = getWordsFromLevel(level, category);
+            const wordsWithAntonyms = words.filter(w => w.antonyme_de && w.antonyme_de.length > 0 && w.wort);
+            
             if (wordsWithAntonyms.length === 0) return null;
             
             const word = wordsWithAntonyms[Math.floor(Math.random() * wordsWithAntonyms.length)];
@@ -754,7 +1187,7 @@
             
             // Generate wrong answers
             const wrongAnswers = words
-                .filter(w => w.wort !== word.wort && !word.antonyme_de.includes(w.wort))
+                .filter(w => w.wort && w.wort !== word.wort && !word.antonyme_de.includes(w.wort))
                 .map(w => w.wort)
                 .sort(() => 0.5 - Math.random())
                 .slice(0, 3);
@@ -770,85 +1203,21 @@
             };
         }
 
-        function generateVerbQuestion(level, formType) {
-            const verbs = gameData.core_vocabulary_A1_B1[level]?.verben || [];
-            if (verbs.length === 0) return null;
-            
-            const verb = verbs[Math.floor(Math.random() * verbs.length)];
-            const correctAnswer = formType === 'preteritum' ? verb.praeteritum : verb.partizip_ii;
-            
-            // Generate wrong answers from other verbs
-            const wrongAnswers = verbs
-                .filter(v => v.infinitiv !== verb.infinitiv)
-                .map(v => formType === 'preteritum' ? v.praeteritum : v.partizip_ii)
-                .filter(form => form !== correctAnswer)
-                .sort(() => 0.5 - Math.random())
-                .slice(0, 3);
-            
-            const formName = formType === 'preteritum' ? 'past tense (Präteritum)' : 'past participle (Partizip II)';
-            
-            return {
-                question: `What is the ${formName} of "${verb.infinitiv}"?`,
-                type: `verb_${formType}`,
-                level: level,
-                correct: correctAnswer,
-                options: shuffleArray([correctAnswer, ...wrongAnswers]),
-                word: verb.infinitiv,
-                explanation: `${verb.infinitiv} → ${correctAnswer} (${formName})`
-            };
-        }
-
-        function generatePrepositionQuestion(level) {
-            const verbs = gameData.core_vocabulary_A1_B1[level]?.verben || [];
-            const verbsWithPrep = verbs.filter(v => v.festpraeposition && v.praepositional_kasus);
-            if (verbsWithPrep.length === 0) return null;
-            
-            const verb = verbsWithPrep[Math.floor(Math.random() * verbsWithPrep.length)];
-            const correctAnswer = `${verb.festpraeposition} + ${verb.praepositional_kasus}`;
-            
-            // Generate wrong preposition combinations
-            const prepositions = ['an', 'auf', 'für', 'mit', 'über', 'von', 'zu'];
-            const cases = ['Dativ', 'Akkusativ'];
-            const wrongAnswers = [];
-            
-            while (wrongAnswers.length < 3) {
-                const wrongPrep = prepositions[Math.floor(Math.random() * prepositions.length)];
-                const wrongCase = cases[Math.floor(Math.random() * cases.length)];
-                const wrong = `${wrongPrep} + ${wrongCase}`;
-                if (wrong !== correctAnswer && !wrongAnswers.includes(wrong)) {
-                    wrongAnswers.push(wrong);
-                }
-            }
-            
-            return {
-                question: `Which preposition and case does "${verb.infinitiv}" take?`,
-                type: 'preposition',
-                level: level,
-                correct: correctAnswer,
-                options: shuffleArray([correctAnswer, ...wrongAnswers]),
-                word: verb.infinitiv,
-                explanation: `${verb.infinitiv} ${correctAnswer}`
-            };
-        }
-
         function generateWrongPlurals(singular, correctPlural) {
-            const endings = ['e', 'en', 'er', 's', 'ø'];
+            const endings = ['e', 'en', 'er', 's'];
             const wrongAnswers = [];
             
             endings.forEach(ending => {
-                let wrong;
-                if (ending === 'ø') {
-                    wrong = singular; // No change
-                } else if (ending === 'er' && singular.includes('a')) {
-                    wrong = `die ${singular.replace('a', 'ä')}${ending}`;
-                } else {
-                    wrong = `die ${singular}${ending}`;
-                }
-                
+                const wrong = `die ${singular}${ending}`;
                 if (wrong !== correctPlural && wrongAnswers.length < 3) {
                     wrongAnswers.push(wrong);
                 }
             });
+            
+            // If still not enough, add some variations
+            if (wrongAnswers.length < 3) {
+                wrongAnswers.push(`die ${singular}`, `das ${singular}e`, `der ${singular}en`);
+            }
             
             return wrongAnswers.slice(0, 3);
         }
@@ -874,8 +1243,17 @@
                 currentQuestion: 0,
                 score: 0,
                 answers: [],
-                startTime: new Date().toISOString()
+                startTime: new Date().toISOString(),
+                lifelines: {
+                    fiftyFifty: true,
+                    phoneFriend: true,
+                    askAudience: true,
+                    askExpert: true
+                }
             };
+
+            // Reset lifeline buttons
+            resetLifelines();
 
             // Generate 15 questions with appropriate difficulty
             for (let i = 1; i <= 15; i++) {
@@ -911,13 +1289,33 @@
             const container = document.getElementById('options-container');
             container.innerHTML = '';
 
+            // Create WWTBAM style layout
+            const letters = ['A', 'B', 'C', 'D'];
+            const leftPair = document.createElement('div');
+            leftPair.className = 'option-pair';
+            const rightPair = document.createElement('div');
+            rightPair.className = 'option-pair';
+
             question.options.forEach((option, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.textContent = option;
+                btn.innerHTML = `
+                    <div class="option-letter">${letters[index]}</div>
+                    <div class="option-text">${option}</div>
+                `;
                 btn.onclick = () => selectAnswer(option, btn);
-                container.appendChild(btn);
+                btn.dataset.letter = letters[index];
+                btn.dataset.option = option;
+
+                if (index < 2) {
+                    leftPair.appendChild(btn);
+                } else {
+                    rightPair.appendChild(btn);
+                }
             });
+
+            container.appendChild(leftPair);
+            container.appendChild(rightPair);
 
             updateLadderDisplay();
         }
@@ -947,7 +1345,7 @@
             // Disable all buttons and show correct answer
             document.querySelectorAll('.option-btn').forEach(btn => {
                 btn.disabled = true;
-                if (btn.textContent === question.correct) {
+                if (btn.dataset.option === question.correct) {
                     btn.classList.add('correct');
                 } else if (btn === btnElement && !isCorrect) {
                     btn.classList.add('wrong');
@@ -958,9 +1356,11 @@
 
             // Show next button or end game
             if (currentGame.currentQuestion < currentGame.questions.length - 1) {
-                document.getElementById('next-btn').style.display = 'inline-block';
+                setTimeout(() => {
+                    document.getElementById('next-btn').style.display = 'inline-block';
+                }, 1500);
             } else {
-                setTimeout(() => endGame(), 2000);
+                setTimeout(() => endGame(), 2500);
             }
         }
 
@@ -1014,10 +1414,12 @@
             document.getElementById('start-btn').style.display = 'inline-block';
             document.getElementById('next-btn').style.display = 'none';
             document.getElementById('quit-btn').style.display = 'none';
-            document.getElementById('question-text').innerHTML = 'Welcome to German Quiz Master!<br>Click START to begin your journey.';
+            document.getElementById('question-text').innerHTML = 'Welcome to German Quiz Master!<br>Click START to begin your journey to become a German master!';
             document.getElementById('options-container').innerHTML = '';
             document.getElementById('current-score').textContent = '0';
             document.getElementById('question-num').textContent = '0';
+            
+            resetLifelines();
             
             currentGame = {
                 questions: [],
@@ -1025,10 +1427,149 @@
                 score: 0,
                 answers: [],
                 startTime: null,
-                endTime: null
+                endTime: null,
+                lifelines: {
+                    fiftyFifty: true,
+                    phoneFriend: true,
+                    askAudience: true,
+                    askExpert: true
+                }
             };
             
             updateLadderDisplay();
+        }
+
+        // Lifeline functions
+        function resetLifelines() {
+            ['fifty-fifty', 'phone-friend', 'ask-audience', 'ask-expert'].forEach(id => {
+                const btn = document.getElementById(id);
+                btn.disabled = false;
+                btn.classList.remove('used');
+            });
+        }
+
+        function useFiftyFifty() {
+            if (!currentGame.lifelines.fiftyFifty) return;
+            
+            currentGame.lifelines.fiftyFifty = false;
+            document.getElementById('fifty-fifty').disabled = true;
+            document.getElementById('fifty-fifty').classList.add('used');
+            
+            const question = currentGame.questions[currentGame.currentQuestion];
+            const optionButtons = document.querySelectorAll('.option-btn');
+            const correctAnswer = question.correct;
+            
+            // Find wrong answers to eliminate
+            const wrongButtons = Array.from(optionButtons).filter(btn => 
+                btn.dataset.option !== correctAnswer
+            );
+            
+            // Randomly eliminate 2 wrong answers
+            const toEliminate = wrongButtons.sort(() => 0.5 - Math.random()).slice(0, 2);
+            toEliminate.forEach(btn => {
+                btn.classList.add('eliminated');
+                btn.disabled = true;
+            });
+            
+            showLifelineModal('50:50 Lifeline', 'Two wrong answers have been eliminated!');
+        }
+
+        function usePhoneFriend() {
+            if (!currentGame.lifelines.phoneFriend) return;
+            
+            currentGame.lifelines.phoneFriend = false;
+            document.getElementById('phone-friend').disabled = true;
+            document.getElementById('phone-friend').classList.add('used');
+            
+            const question = currentGame.questions[currentGame.currentQuestion];
+            const letters = ['A', 'B', 'C', 'D'];
+            const correctIndex = question.options.indexOf(question.correct);
+            const correctLetter = letters[correctIndex];
+            
+            // Friend is 75% likely to be right
+            const isRight = Math.random() < 0.75;
+            const suggestion = isRight ? correctLetter : letters[Math.floor(Math.random() * 4)];
+            
+            const confidence = isRight ? 
+                Math.floor(Math.random() * 30) + 70 : // 70-100% if right
+                Math.floor(Math.random() * 50) + 30;  // 30-80% if wrong
+                
+            showLifelineModal(
+                'Phone a Friend',
+                `Your friend says: "I'm ${confidence}% sure the answer is ${suggestion}. That's what I would go with!"`
+            );
+        }
+
+        function useAskAudience() {
+            if (!currentGame.lifelines.askAudience) return;
+            
+            currentGame.lifelines.askAudience = false;
+            document.getElementById('ask-audience').disabled = true;
+            document.getElementById('ask-audience').classList.add('used');
+            
+            const question = currentGame.questions[currentGame.currentQuestion];
+            const letters = ['A', 'B', 'C', 'D'];
+            const correctIndex = question.options.indexOf(question.correct);
+            
+            // Generate audience poll (correct answer gets 40-70% of votes)
+            const votes = [0, 0, 0, 0];
+            let remaining = 100;
+            
+            // Give correct answer 40-70% of votes
+            votes[correctIndex] = Math.floor(Math.random() * 30) + 40;
+            remaining -= votes[correctIndex];
+            
+            // Distribute remaining votes
+            for (let i = 0; i < 4; i++) {
+                if (i !== correctIndex && remaining > 0) {
+                    const vote = Math.floor(Math.random() * (remaining / 2));
+                    votes[i] = vote;
+                    remaining -= vote;
+                }
+            }
+            votes[0] += remaining; // Add any remainder to first option
+            
+            const pollResults = letters.map((letter, index) => 
+                `${letter}: ${votes[index]}%`
+            ).join('\n');
+            
+            showLifelineModal(
+                'Ask the Audience',
+                `Here are the audience poll results:\n\n${pollResults}`
+            );
+        }
+
+        function useAskExpert() {
+            if (!currentGame.lifelines.askExpert) return;
+            
+            currentGame.lifelines.askExpert = false;
+            document.getElementById('ask-expert').disabled = true;
+            document.getElementById('ask-expert').classList.add('used');
+            
+            const question = currentGame.questions[currentGame.currentQuestion];
+            const letters = ['A', 'B', 'C', 'D'];
+            const correctIndex = question.options.indexOf(question.correct);
+            const correctLetter = letters[correctIndex];
+            
+            // Expert is 90% likely to be right
+            const isRight = Math.random() < 0.9;
+            const suggestion = isRight ? correctLetter : letters[Math.floor(Math.random() * 4)];
+            
+            const expertAdvice = isRight ?
+                `The expert says: "I'm confident the answer is ${suggestion}. ${question.explanation || 'This is the correct translation.'}"` :
+                `The expert says: "I believe the answer is ${suggestion}, though I'm not entirely certain about this one."`;
+            
+            showLifelineModal('Ask the Expert', expertAdvice);
+        }
+
+        function showLifelineModal(title, text) {
+            document.getElementById('lifeline-title').textContent = title;
+            document.getElementById('lifeline-text').textContent = text;
+            document.getElementById('lifeline-modal').style.display = 'block';
+        }
+
+        function closeLifelineModal() {
+            document.getElementById('lifeline-modal').style.display = 'none';
         }
 
         // Local storage functions
@@ -1043,7 +1584,8 @@
                 correctAnswers: currentGame.answers.filter(a => a.isCorrect).length,
                 accuracy: Math.round((currentGame.answers.filter(a => a.isCorrect).length / currentGame.answers.length) * 100),
                 duration: calculateGameDuration(),
-                answers: currentGame.answers
+                answers: currentGame.answers,
+                lifelinesUsed: Object.entries(currentGame.lifelines).filter(([key, value]) => !value).length
             };
             
             games.unshift(gameRecord);
@@ -1079,13 +1621,13 @@
                 item.innerHTML = `
                     <div>
                         <div>${game.date} ${game.time}</div>
-                        <div style="font-size: 8px; color: #666; margin-top: 2px;">
-                            ${game.questionsAnswered}/15 questions
+                        <div style="font-size: 9px; color: #aaa; margin-top: 3px;">
+                            ${game.questionsAnswered}/15 questions • ${game.lifelinesUsed || 0} lifelines used
                         </div>
                     </div>
-                    <div>
+                    <div style="text-align: right;">
                         <div>Score: ${game.score}</div>
-                        <div style="font-size: 8px; color: #666; margin-top: 2px;">
+                        <div style="font-size: 9px; color: #aaa; margin-top: 3px;">
                             ${game.accuracy}% accuracy
                         </div>
                     </div>
@@ -1099,30 +1641,32 @@
                 details.className = 'score-details';
                 details.id = `details-${game.id}`;
                 details.innerHTML = generateGameDetailsHTML(game);
+                details.style.display = 'none';
                 container.appendChild(details);
             });
         }
 
         function toggleGameDetails(gameId, itemElement) {
             const details = document.getElementById(`details-${gameId}`);
-            const isVisible = details.classList.contains('show');
+            const isVisible = details.style.display === 'block';
             
             // Hide all other details
-            document.querySelectorAll('.score-details').forEach(d => d.classList.remove('show'));
+            document.querySelectorAll('.score-details').forEach(d => d.style.display = 'none');
             
             if (!isVisible) {
-                details.classList.add('show');
+                details.style.display = 'block';
             }
         }
 
         function generateGameDetailsHTML(game) {
             let html = `
-                <div style="margin-bottom: 15px;">
-                    <strong>Game Summary:</strong><br>
-                    Duration: ${game.duration}s | Score: ${game.score} | Accuracy: ${game.accuracy}%
+                <div style="margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
+                    <strong style="color: #00ff41;">Game Summary:</strong><br>
+                    Duration: ${game.duration}s | Score: ${game.score} | Accuracy: ${game.accuracy}%<br>
+                    Lifelines Used: ${game.lifelinesUsed || 0}/4
                 </div>
-                <div style="margin-bottom: 15px;">
-                    <strong>Question Types Performance:</strong><br>
+                <div style="margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
+                    <strong style="color: #ff6b35;">Question Types Performance:</strong><br>
             `;
             
             // Analyze performance by question type
@@ -1137,18 +1681,19 @@
             
             Object.entries(typeStats).forEach(([type, stats]) => {
                 const accuracy = Math.round((stats.correct / stats.total) * 100);
-                html += `${type}: ${stats.correct}/${stats.total} (${accuracy}%)<br>`;
+                const color = accuracy >= 80 ? '#00ff41' : accuracy >= 60 ? '#ff6b35' : '#ff3366';
+                html += `<span style="color: ${color}">${type}: ${stats.correct}/${stats.total} (${accuracy}%)</span><br>`;
             });
             
-            html += '</div><div><strong>Improvement Areas:</strong><br>';
+            html += '</div><div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;"><strong style="color: #00bfff;">Improvement Areas:</strong><br>';
             
             // Identify areas for improvement
             const wrongAnswers = game.answers.filter(a => !a.isCorrect);
             if (wrongAnswers.length > 0) {
                 const problemTypes = [...new Set(wrongAnswers.map(a => a.type))];
-                html += problemTypes.join(', ');
+                html += `Focus on: ${problemTypes.join(', ')}`;
             } else {
-                html += 'Perfect game! No areas to improve.';
+                html += '<span style="color: #00ff41;">Perfect game! No areas to improve. 🏆</span>';
             }
             
             html += '</div>';
@@ -1164,9 +1709,9 @@
                 const div = document.createElement('div');
                 div.className = 'ladder-rung';
                 div.innerHTML = `
-                    <span>Q${rung.question}</span>
-                    <span>${rung.points} pts</span>
-                    <span class="difficulty-badge" style="color: ${getDifficultyColor(rung.difficulty)}">${rung.difficulty.toUpperCase()}</span>
+                    <span style="font-weight: bold;">Q${rung.question}</span>
+                    <span style="color: #00ff41;">${rung.points} pts</span>
+                    <span style="color: ${getDifficultyColor(rung.difficulty)}; font-size: 10px;">${rung.difficulty.toUpperCase()}</span>
                 `;
                 container.appendChild(div);
             });
@@ -1234,23 +1779,10 @@
             }
             
             if (games.length === 0) {
-                window.performanceChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: [],
-                        datasets: []
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: { display: false },
-                            x: { display: false }
-                        }
-                    }
-                });
+                ctx.fillStyle = '#666';
+                ctx.font = '16px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText('No games played yet', ctx.canvas.width / 2, ctx.canvas.height / 2);
                 return;
             }
             
@@ -1270,6 +1802,11 @@
                             borderColor: '#00ff41',
                             backgroundColor: 'rgba(0, 255, 65, 0.1)',
                             tension: 0.4,
+                            borderWidth: 3,
+                            pointBackgroundColor: '#00ff41',
+                            pointBorderColor: '#000',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
                             yAxisID: 'y'
                         },
                         {
@@ -1278,6 +1815,11 @@
                             borderColor: '#ff6b35',
                             backgroundColor: 'rgba(255, 107, 53, 0.1)',
                             tension: 0.4,
+                            borderWidth: 3,
+                            pointBackgroundColor: '#ff6b35',
+                            pointBorderColor: '#000',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
                             yAxisID: 'y1'
                         }
                     ]
@@ -1292,27 +1834,48 @@
                         legend: {
                             labels: {
                                 color: '#fff',
-                                font: { family: 'Press Start 2P', size: 8 }
+                                font: { family: 'Press Start 2P', size: 10 }
                             }
                         }
                     },
                     scales: {
                         x: {
-                            ticks: { color: '#fff', font: { family: 'Press Start 2P', size: 6 } },
+                            ticks: { 
+                                color: '#fff', 
+                                font: { family: 'Press Start 2P', size: 8 } 
+                            },
                             grid: { color: 'rgba(255, 255, 255, 0.1)' }
                         },
                         y: {
                             type: 'linear',
                             display: true,
                             position: 'left',
-                            ticks: { color: '#00ff41', font: { family: 'Press Start 2P', size: 6 } },
+                            title: {
+                                display: true,
+                                text: 'Score',
+                                color: '#00ff41',
+                                font: { family: 'Press Start 2P', size: 10 }
+                            },
+                            ticks: { 
+                                color: '#00ff41', 
+                                font: { family: 'Press Start 2P', size: 8 } 
+                            },
                             grid: { color: 'rgba(0, 255, 65, 0.1)' }
                         },
                         y1: {
                             type: 'linear',
                             display: true,
                             position: 'right',
-                            ticks: { color: '#ff6b35', font: { family: 'Press Start 2P', size: 6 } },
+                            title: {
+                                display: true,
+                                text: 'Accuracy %',
+                                color: '#ff6b35',
+                                font: { family: 'Press Start 2P', size: 10 }
+                            },
+                            ticks: { 
+                                color: '#ff6b35', 
+                                font: { family: 'Press Start 2P', size: 8 } 
+                            },
                             grid: { drawOnChartArea: false }
                         }
                     }

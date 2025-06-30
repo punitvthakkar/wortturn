@@ -906,7 +906,15 @@
 
         function getWordsFromLevel(level, category) {
             try {
-                const levelData = gameData.core_vocabulary_A1_B1[level];
+                let levelData;
+                if (level === 'B1') {
+                    // B1 data is at root level in JSON
+                    levelData = gameData.B1;
+                } else {
+                    // A1 and A2 are under core_vocabulary_A1_B1
+                    levelData = gameData.core_vocabulary_A1_B1[level];
+                }
+                
                 if (!levelData || !levelData[category]) {
                     return gameData.core_vocabulary_A1_B1.A1[category] || [];
                 }
@@ -1067,15 +1075,46 @@
         }
 
         function generateFallbackQuestion() {
-            return {
-                question: "Was bedeutet 'Hallo' auf Englisch?",
-                type: 'translation',
-                level: 'A1',
-                correct: "Hello",
-                options: ["Hello", "Goodbye", "Please", "Thank you"],
-                word: "Hallo",
-                explanation: "Hallo = Hello"
-            };
+            const fallbacks = [
+                {
+                    question: "Was bedeutet 'Hallo' auf Englisch?",
+                    type: 'translation',
+                    level: 'A1',
+                    correct: "Hello",
+                    options: ["Hello", "Goodbye", "Please", "Thank you"],
+                    word: "Hallo",
+                    explanation: "Hallo = Hello"
+                },
+                {
+                    question: "Welcher Artikel gehört zu 'Haus'?",
+                    type: 'article',
+                    level: 'A1',
+                    correct: "das",
+                    options: ["das", "der", "die", "kein Artikel"],
+                    word: "Haus",
+                    explanation: "das Haus (the house)"
+                },
+                {
+                    question: "Was bedeutet 'gut' auf Englisch?",
+                    type: 'translation',
+                    level: 'A1',
+                    correct: "good",
+                    options: ["good", "bad", "big", "small"],
+                    word: "gut",
+                    explanation: "gut = good"
+                },
+                {
+                    question: "Was ist das Gegenteil von 'groß'?",
+                    type: 'antonym',
+                    level: 'A1',
+                    correct: "klein",
+                    options: ["klein", "gut", "schlecht", "neu"],
+                    word: "groß",
+                    explanation: "groß ↔ klein"
+                }
+            ];
+            
+            return fallbacks[Math.floor(Math.random() * fallbacks.length)];
         }
 
         function shuffleArray(array) {

@@ -672,7 +672,7 @@
             answers: [],
             corrections: [],
             difficulty: 1,
-            questionTypes: ['article', 'plural', 'translation', 'synonym', 'antonym'],
+            questionTypes: ['article', 'plural', 'translation', 'synonym', 'antonym', 'comparative', 'preterite', 'partizip'],
             typeIndex: 0,
             lifelines: {
                 fiftyFifty: true,
@@ -796,7 +796,7 @@
                 answers: [],
                 corrections: [],
                 difficulty: 1,
-                questionTypes: ['article', 'plural', 'translation', 'synonym', 'antonym'],
+                questionTypes: ['article', 'plural', 'translation', 'synonym', 'antonym', 'comparative', 'preterite', 'partizip'],
                 typeIndex: 0,
                 lifelines: {
                     fiftyFifty: true,
@@ -880,6 +880,15 @@
                             break;
                         case 'antonym':
                             question = generateAntonymQuestion(level);
+                            break;
+                        case 'comparative':
+                            question = generateComparativeQuestion(level);
+                            break;
+                        case 'preterite':
+                            question = generatePreteriteQuestion(level);
+                            break;
+                        case 'partizip':
+                            question = generatePartizipQuestion(level);
                             break;
                     }
                     
@@ -1056,6 +1065,99 @@
             };
         }
 
+        function generateComparativeQuestion(level) {
+            const adjectives = getWordsFromLevel(level, 'adjektive_adverbien');
+            const adjectivesWithComparative = adjectives.filter(w => w && w.steigerung && w.steigerung.komparativ && w.wort);
+            
+            if (adjectivesWithComparative.length === 0) return null;
+            
+            const adjective = adjectivesWithComparative[Math.floor(Math.random() * adjectivesWithComparative.length)];
+            const correctAnswer = adjective.steigerung.komparativ;
+            
+            const wrongAnswers = adjectivesWithComparative
+                .filter(w => w.steigerung.komparativ !== correctAnswer)
+                .map(w => w.steigerung.komparativ)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3);
+            
+            if (wrongAnswers.length < 3) {
+                const fallbacks = ['größer', 'kleiner', 'besser', 'schlechter', 'älter', 'jünger'];
+                wrongAnswers.push(...fallbacks.filter(f => f !== correctAnswer).slice(0, 3 - wrongAnswers.length));
+            }
+            
+            return {
+                question: `Wie lautet der Komparativ von "${adjective.wort}"?`,
+                type: 'comparative',
+                level: level,
+                correct: correctAnswer,
+                options: shuffleArray([correctAnswer, ...wrongAnswers.slice(0, 3)]),
+                word: adjective.wort,
+                explanation: `${adjective.wort} → ${correctAnswer}`
+            };
+        }
+
+        function generatePreteriteQuestion(level) {
+            const verbs = getWordsFromLevel(level, 'verben');
+            const verbsWithPreterite = verbs.filter(w => w && w.praeteritum && w.infinitiv);
+            
+            if (verbsWithPreterite.length === 0) return null;
+            
+            const verb = verbsWithPreterite[Math.floor(Math.random() * verbsWithPreterite.length)];
+            const correctAnswer = verb.praeteritum;
+            
+            const wrongAnswers = verbsWithPreterite
+                .filter(w => w.praeteritum !== correctAnswer)
+                .map(w => w.praeteritum)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3);
+            
+            if (wrongAnswers.length < 3) {
+                const fallbacks = ['war', 'hatte', 'ging', 'kam', 'machte', 'sagte'];
+                wrongAnswers.push(...fallbacks.filter(f => f !== correctAnswer).slice(0, 3 - wrongAnswers.length));
+            }
+            
+            return {
+                question: `Wie lautet das Präteritum von "${verb.infinitiv}"?`,
+                type: 'preterite',
+                level: level,
+                correct: correctAnswer,
+                options: shuffleArray([correctAnswer, ...wrongAnswers.slice(0, 3)]),
+                word: verb.infinitiv,
+                explanation: `${verb.infinitiv} → ${correctAnswer}`
+            };
+        }
+
+        function generatePartizipQuestion(level) {
+            const verbs = getWordsFromLevel(level, 'verben');
+            const verbsWithPartizip = verbs.filter(w => w && w.partizip_ii && w.infinitiv);
+            
+            if (verbsWithPartizip.length === 0) return null;
+            
+            const verb = verbsWithPartizip[Math.floor(Math.random() * verbsWithPartizip.length)];
+            const correctAnswer = verb.partizip_ii;
+            
+            const wrongAnswers = verbsWithPartizip
+                .filter(w => w.partizip_ii !== correctAnswer)
+                .map(w => w.partizip_ii)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3);
+            
+            if (wrongAnswers.length < 3) {
+                const fallbacks = ['gemacht', 'gesagt', 'gegangen', 'gekommen', 'gewesen', 'gehabt'];
+                wrongAnswers.push(...fallbacks.filter(f => f !== correctAnswer).slice(0, 3 - wrongAnswers.length));
+            }
+            
+            return {
+                question: `Wie lautet das Partizip II von "${verb.infinitiv}"?`,
+                type: 'partizip',
+                level: level,
+                correct: correctAnswer,
+                options: shuffleArray([correctAnswer, ...wrongAnswers.slice(0, 3)]),
+                word: verb.infinitiv,
+                explanation: `${verb.infinitiv} → ${correctAnswer}`
+            };
+        }
+
         function generateWrongPlurals(singular, correctPlural) {
             const endings = ['e', 'en', 'er', 's'];
             const wrongAnswers = [];
@@ -1111,6 +1213,24 @@
                     options: ["klein", "gut", "schlecht", "neu"],
                     word: "groß",
                     explanation: "groß ↔ klein"
+                },
+                {
+                    question: "Wie lautet das Präteritum von 'sein'?",
+                    type: 'preterite',
+                    level: 'A1',
+                    correct: "war",
+                    options: ["war", "bin", "ist", "wäre"],
+                    word: "sein",
+                    explanation: "sein → war"
+                },
+                {
+                    question: "Wie lautet der Komparativ von 'gut'?",
+                    type: 'comparative',
+                    level: 'A1',
+                    correct: "besser",
+                    options: ["besser", "guter", "am besten", "mehr gut"],
+                    word: "gut",
+                    explanation: "gut → besser"
                 }
             ];
             
